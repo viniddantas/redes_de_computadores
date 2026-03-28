@@ -1,0 +1,130 @@
+.car-category {
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 1rem;
+}
+
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    list-style: none;
+}
+
+.car-card {
+    background-color: #fff;
+    width: 350px;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+}
+
+
+.car-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.car-content {
+    padding: 20px;
+}
+
+.car-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.brand-logo {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    color: #666;
+}
+
+.brand-name {
+    font-size: 18px;
+    color: #333;
+}
+
+.car-model {
+    font-weight: bold;
+    font-size: 18px;
+    color: #111;
+}
+
+.car-description {
+    font-size: 14px;
+    color: #222;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 20px;
+}
+
+.car-details {
+    display: flex;
+    gap: 20px;
+    color: #666;
+    font-size: 13px;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+
+.car-footer {
+    border-top: 1px solid #e0e0e0;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fafafa;
+}
+
+.car-price {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    color: #631212;
+}
+
+.currency {
+    font-size: 14px;
+    font-weight: bold;
+    color: #111;
+}
+
+.value {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.btn-ver-mais {
+    background-color: transparent;
+    border: 1px solid #631212;
+    color: #631212;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-ver-mais:hover {
+    background-color: #631212;
+    color: #fff;
+}

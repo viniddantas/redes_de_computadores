@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link href="./css/reset.css" rel="stylesheet">
+    <link href="./css/head_foot.css" rel="stylesheet">
+    <link href="./css/veiculo.css" rel="stylesheet">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+</head>
+<body>
+    <header class="cabecalho">
+        <h1 class="logo">MasterCar</h1>
+
+        <nav class="menu">
+            <ul>
+                <li><a href="./">Home</a></li>
+                <li><a href="./sobre.html">Sobre</a></li>
+                <li><a href="./login.html" class="btn-login">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="conteudo-carro-individual">
+        <div class="carro-detalhes-container">
+            
+            <div class="carro-imagem-destaque">
+                <img src="{{IMAGEM_CARRO}}" alt="{{MODELO_CARRO}}">
+            </div>
+
+            <div class="carro-info-destaque">
+                <div class="carro-header-detalhe">
+                    <h2>{{MARCA_CARRO}} {{MODELO_CARRO}}</h2>
+                    <p class="versao">{{VERSAO_CARRO}}</p>
+                </div>
+
+                <div class="carro-preco-destaque">
+                    <span class="moeda">R$</span> {{PRECO_CARRO}}
+                </div>
+
+                <ul class="carro-fichatecnica">
+                    <li><strong>Ano:</strong> {{ANO_CARRO}}</li>
+                    <li><strong>Quilometragem:</strong> {{KM_CARRO}}</li>
+                    <li><strong>Câmbio:</strong> {{CAMBIO_CARRO}}</li>
+                </ul>
+
+                <div class="carro-descricao-texto">
+                    <h3>Descrição</h3>
+                    <p>{{DESCRICAO_CARRO}}</p>
+                </div>
+
+                <button class="btn-comprar">Tenho Interesse</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="rodape">
+        <div class="rodape-conteudo">
+            
+            <div class="rodape-logo">
+                <h2>MasterCar</h2>
+            </div>
+            
+            <div class="rodape-contato">
+                <h3>Contato</h3>
+                
+                <form action="/enviar-contato" method="POST" class="form-contato">
+                    <div class="campo">
+                        <label for="email">E-mail:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="campo">
+                        <label for="assunto">Assunto:</label>
+                        <input type="text" id="assunto" name="assunto" required>
+                    </div>
+                    
+                    <div class="campo">
+                        <label for="mensagem">Mensagem:</label>
+                        <textarea id="mensagem" name="mensagem" rows="4" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn-enviar">Enviar para o Servidor</button>
+                </form>
+            </div>
+
+        </div>
+    </footer>
+</body>
+</html>

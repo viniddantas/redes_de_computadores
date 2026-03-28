@@ -1,21 +1,128 @@
-header {
-    height: 10vh;
-    display: flex;
-    align-items: center;
-    padding: .5rem;
+body {
     font-family: "Montserrat", sans-serif;
 }
 
-.header__brand {
-    text-align: center;
-    margin: auto;
-    
+
+/* Header */
+.cabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 40px 40px;
+    background-color: #fff;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.menu a {
+    font-size: 1.2rem;
+}
+
+.logo {
     font-size: 1.5rem;
 }
 
-.navbar {
-    display: flex;  
+.menu ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 24px;
 }
-.navbar a:first-child{
-    padding-right: 1rem;
+
+.btn-login {
+    border: 1px solid #631212; 
+    color: #631212 !important;
+    padding: 8px 20px;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btn-login:hover {
+    background-color: #631212;
+    color: #fff !important;
+}
+
+
+/* Footer */
+.rodape {
+    background-color: #1a1a1a;
+    color: #f4f4f4;
+    padding: 40px 20px;
+    margin-top: auto; 
+}
+
+.rodape-contato h3, .campo label {
+    color: #f4f4f4;
+}
+
+
+.rodape-conteudo {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+
+.rodape-logo {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    margin-top: 50px;
+}
+
+.rodape-logo h2 {
+    font-weight: 400;
+    font-size: 32px;
+}
+
+.rodape-contato {
+    flex: 1;
+    max-width: 450px;
+}
+
+.rodape-contato h3 {
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.form-contato {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.campo label {
+    font-size: 14px;
+}
+
+.campo input,
+.campo textarea {
+    padding: 8px;
+    border: none;
+    border-radius: 2px;
+    font-family: inherit; 
+    resize: vertical; 
+}
+
+.btn-enviar {
+    margin-top: 5px;
+    padding: 10px;
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #ccc;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-enviar:hover {
+    background-color: #e0e0e0;
 }

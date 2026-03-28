@@ -1,5 +1,3 @@
-#implementação de um servidor base para interpratação de métodos HTTP
-
 import socket
 
 # Nosso banco de dados simulado
