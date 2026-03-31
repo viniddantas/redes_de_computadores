@@ -3,18 +3,60 @@ import socket
 # Nosso banco de dados simulado
 banco_de_carros = {
     "ferrari": {
-        "nome": "Ferrari 458 ITALIA",
-        "imagem": "/img/ferrari.jpg "
+        "nome": "Ferrari 458 Italia",
+        "imagem": "/img/ferrari.jpg",
+        "preco": "R$ 2.000.000",
+        "descricao": "Ferrari 458 Italia 4.5 V8 32V Gasolina F1-DCT - Vermelho - 2011",
+        "cavalos": "570 CV",
+        "cilindros": "V8",
     },
-    "pors": {
-        "nome": "Honda Civic",
-        "preco": "R$ 120.000",
-        "imagem": "/img/civic.jpg"
+    "porsche": {
+        "nome": "Porsche 911 Carrera S",
+        "imagem": "/img/porsche.jpg",
+        "preco": "R$ 1.100.000",
+        "descricao": "Porsche 911 Carrera S 3.0 24V H6 Gasolina PDK - Prata - 2024",
+        "cavalos": "450 CV",
+        "cilindros": "H6 (Boxer)",
     },
-    "celta": {
-        "nome": "Chevrolet Celta",
-        "preco": "R$ 18.000",
-        "imagem": "/img/celta.jpg"
+    "uno": {
+        "nome": "Fiat Uno Mille Way",
+        "imagem": "/img/uno.jpg",
+        "preco": "R$ 30.000",
+        "descricao": "Fiat Uno Mille Way Economy 1.0 Fire Flex Manual - Branco - 2013",
+        "cavalos": "66 CV",
+        "cilindros": "L4",
+    },
+    "mercedes": {
+        "nome": "Mercedes-Benz 300 SL",
+        "imagem": "/img/mercedes.jpg",
+        "preco": "R$ 15.000.000",
+        "descricao": "Mercedes-Benz 300 SL Gullwing 3.0 L6 Gasolina Manual - Prata - 1955",
+        "cavalos": "215 CV",
+        "cilindros": "L6",
+    },
+    "lamborghini": {
+        "nome": "Lamborghini Aventador",
+        "imagem": "/img/aventador.jpg",
+        "preco": "R$ 4.500.000",
+        "descricao": "Lamborghini Aventador LP 700-4 6.5 V12 Gasolina ISR - Laranja - 2018",
+        "cavalos": "700 CV",
+        "cilindros": "V12",
+    },
+    "nissan": {
+        "nome": "Nissan Skyline GT-R R34",
+        "imagem": "/img/skyline.jpg",
+        "preco": "R$ 1.200.000",
+        "descricao": "Nissan Skyline GT-R V-Spec II 2.6 L6 Biturbo Manual - Azul - 2002",
+        "cavalos": "280 CV",
+        "cilindros": "L6",
+    },
+    "chevrolet": {
+        "nome": "Chevrolet Corvette C8",
+        "imagem": "/img/corvette.jpg",
+        "preco": "R$ 1.300.000",
+        "descricao": "Chevrolet Corvette Stingray 6.2 V8 Gasolina Dual-Clutch - Amarelo - 2023",
+        "cavalos": "495 CV",
+        "cilindros": "V8",
     }
 }
 
