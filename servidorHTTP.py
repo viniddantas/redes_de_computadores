@@ -146,6 +146,42 @@ def get(headers, client_connection):
         response = "HTTP/1.1 404 NOT FOUND\n\n<h1>ERROR 404!<br>File Not Found!</h1>"
         client_connection.sendall(response.encode('utf-8'))
     
+def post(request, client_connection):
+    # request = 'POST /login HTTP/1.1\r\nHost: localhost:8080\r\nConnection: keep-alive\r\nContent-Length: 36\r\nContent-Type: application/x-www-form-urlencoded\r\nUser-Agent: Mozilla/5.0...\r\nAccept: text/html...\r\n\r\nemail=admin%40mastercar.com&senha=1234'c
+    partes = request.split("\r\n\r\n", 1)
+
+    print(partes[1])
+    if len(partes) > 0 and len(partes[1]) > 1:
+
+        try:
+            usuario = partes[1].split("&")[0].split("=")[1]
+            senha = partes[1].split("&")[1].split("=")[1]
+            if usuario == "admin" and senha == "admin":
+                print("Login APROVADO. Redirecionando...")
+                response = "HTTP/1.1 302 Found\r\nLocation: /administracao.html\r\n\r\n"
+                client_connection.sendall(response.encode('utf-8'))
+            else:
+                html_erro = """
+                <!DOCTYPE html>
+                <html lang='pt-br'>
+                <head><meta charset='UTF-8'><title>Erro de Login - MasterCar</title></head>
+                <body style='font-family: Arial; text-align: center; padding: 50px; background-color: #f4f4f4;'>
+                    <div style='background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: inline-block;'>
+                        <h1 style='color: #d9534f; margin-top: 0;'>Acesso Negado</h1>
+                        <p style='font-size: 18px; color: #333;'>Usuário ou senha incorretos.</p>
+                        <br>
+                        <a href='/login.html' style='background: #555; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold;'>Tentar Novamente</a>
+                    </div>
+                </body>
+                </html>
+                """
+                response = "HTTP/1.1 401 Unauthorized\r\nContent-Type: text/html; charset=utf-8\r\n\r\n" + html_erro
+                client_connection.sendall(response.encode('utf-8'))
+        except Exception as e:
+            erro_500 = "HTTP/1.1 500 Internal Server Error\r\n\r\n<h1>Erro ao processar o forms</h1>"
+            client_connection.sendall(erro_500.encode('utf-8'))
+    else:
+        print("Post recebido nao contem usuario e senha")
 
     
 #cria o while que irá receber as conexões
@@ -166,26 +202,9 @@ while True:
         method = headers[0]
         if method == 'GET':
             get(headers, client_connection)
-        # elif method == 'POST':
-        #     try:
-        #         dados = headers[0].split()[1]
-        #         print(dados)
-        #     except FileNotFoundError:
-        #         response = "HTTP/1.1 404 NOT FOUND\n\n<h1>ERROR 404!<br>File Not Found!</h1>"
+        elif method == 'POST':
+            post(request, client_connection)    
         
         client_connection.close()
 
 server_socket.close()
-
-
-
-# EXEMPLO DE REQUEST DO NAVEGADOR
-
-# ['GET / HTTP/1.1\r', 'Host: localhost:8080\r', 'Connection: keep-alive\r', 'Cache-Control: max-age=0\r',
-#   'sec-ch-ua: "Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"\r', 'sec-ch-ua-mobile: ?0\r', 
-#   'sec-ch-ua-platform: "Linux"\r', 'Upgrade-Insecure-Requests: 1\r', 
-#   'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36\r', 
-#   'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7\r',
-#   'Sec-Fetch-Site: none\r', 'Sec-Fetch-Mode: navigate\r', 'Sec-Fetch-User: ?1\r', 'Sec-Fetch-Dest: document\r',
-#   'Accept-Encoding: gzip, deflate, br, zstd\r',
-#     'Accept-Language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7\r', '\r', '']
