@@ -1,7 +1,72 @@
-def post():
-    request = 'POST /login HTTP/1.1\r\nHost: localhost:8080\r\nConnection: keep-alive\r\nContent-Length: 36\r\nContent-Type: application/x-www-form-urlencoded\r\nUser-Agent: Mozilla/5.0...\r\nAccept: text/html...\r\n\r\nemail=admin%40mastercar.com&senha=1234'
-    partes = request.split("\r\n\r\n")
+import socket
 
-    print(partes[1])
+banco_de_carros = {
+    "ferrari": {
+        "nome": "Ferrari 458 Italia",
+        "imagem": "/img/ferrari.jpg",
+        "preco": "R$ 2.000.000",
+        "ano": "2020",
+        "descricao": "Ferrari 458 Italia 4.5 V8 32V Gasolina F1-DCT - Vermelho - 2011",
+        "cavalos": "570 CV",
+        "cilindros": "V8",
+    },
+    "porsche": {
+        "nome": "Porsche 911 Carrera S",
+        "imagem": "/img/porsche.jpg",
+        "preco": "R$ 1.100.000",
+        "ano": "2020",
+        "descricao": "Porsche 911 Carrera S 3.0 24V H6 Gasolina PDK - Prata - 2024",
+        "cavalos": "450 CV",
+        "cilindros": "H6 (Boxer)",
+    },
+    "uno": {
+        "nome": "Fiat Uno Mille Way",
+        "imagem": "/img/uno.jpg",
+        "preco": "R$ 30.000",
+        "ano": "2020",
+        "descricao": "Fiat Uno Mille Way Economy 1.0 Fire Flex Manual - Branco - 2013",
+        "cavalos": "66 CV",
+        "cilindros": "L4",
+    },
+    "mercedes": {
+        "nome": "Mercedes-Benz 300 SL",
+        "imagem": "/img/mercedes.jpg",
+        "preco": "R$ 15.000.000",
+        "ano": "2020",
+        "descricao": "Mercedes-Benz 300 SL Gullwing 3.0 L6 Gasolina Manual - Prata - 1955",
+        "cavalos": "215 CV",
+        "cilindros": "L6",
+    },
+    "lamborghini": {
+        "nome": "Lamborghini Aventador",
+        "imagem": "/img/lamborghini.jpg",
+        "preco": "R$ 4.500.000",
+        "ano": "2020",
+        "descricao": "Lamborghini Aventador LP 700-4 6.5 V12 Gasolina ISR - Laranja - 2018",
+        "cavalos": "700 CV",
+        "cilindros": "V12",
+    },
+    "nissan": {
+        "nome": "Nissan Skyline GT-R R34",
+        "imagem": "/img/nissan.jpg",
+        "preco": "R$ 1.200.000",
+        "ano": "2020",
+        "descricao": "Nissan Skyline GT-R V-Spec II 2.6 L6 Biturbo Manual - Azul - 2002",
+        "cavalos": "280 CV",
+        "cilindros": "L6",
+    },
+    "chevrolet": {
+        "nome": "Chevrolet Corvette C8",
+        "imagem": "/img/chevrolet.jpg",
+        "preco": "R$ 1.300.000",
+        "ano": "2020",
+        "descricao": "Chevrolet Corvette Stingray 6.2 V8 Gasolina Dual-Clutch - Amarelo - 2023",
+        "cavalos": "495 CV",
+        "cilindros": "V8",
+    }
+}
 
-post()
+for car, details in banco_de_carros.items():
+    print(car)
+
+# print(banco_de_carros["ferrari"])

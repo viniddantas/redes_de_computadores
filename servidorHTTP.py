@@ -23,9 +23,9 @@ banco_de_carros = {
         "nome": "Fiat Uno Mille Way",
         "imagem": "/img/uno.jpg",
         "preco": "R$ 30.000",
-        "ano": "2020",
+        "ano": "1995",
         "descricao": "Fiat Uno Mille Way Economy 1.0 Fire Flex Manual - Branco - 2013",
-        "cavalos": "66 CV",
+        "cavalos": "2000 CV",
         "cilindros": "L4",
     },
     "mercedes": {
@@ -90,7 +90,6 @@ print("Escutando por conexões na porta %s" % SERVER_PORT)
 
 
 def get(headers, client_connection):
-    # print("\nHeaders\n\n\n", headers)
     filename = headers[1]
 
     if filename == "/":
@@ -100,9 +99,56 @@ def get(headers, client_connection):
 
     #try e except para tratamento de erro quando um arquivo solicitado não existir
     try:
-        # print("htdocs" + filename)
+        print("htdocs" + filename)
+        if filename == "/index.html":
+            car_html = ""
 
-        if 'veiculos.html?' in filename:
+            for car, details in banco_de_carros.items():
+                car_html += f"""
+                    <li class="car-card">
+                        <div class="car-image">
+                            <img src="{details["imagem"]}" alt="{details["nome"]}">
+                        </div>
+                
+                        <div class="car-content">
+                            <div class="car-header">
+                                <p class="car-model">{details["nome"]}</p>
+                            </div>
+                
+                            <p class="car-description">
+                                {details["descricao"]}
+                            </p>
+                
+                            <div class="car-details">
+                                <p class="detail-item">
+                                    {details["ano"]}
+                                </p>
+                                <p class="detail-item">
+                                    {details["cavalos"]}
+                                </p>
+                                <p class="detail-item">
+                                    {details["cilindros"]}
+                                </p>
+                            </div>
+                        </div>
+                
+                        <div class="car-footer">
+                            <div class="car-price">
+                                <p class="currency">R$</p>
+                                <p class="value">{details["preco"]}</p>
+                            </div>
+                            <a href="./veiculo.html?carro={car}" class="btn-ver-mais" style="text-decoration:none; text-align:center;">Ver mais</a>
+                        </div>
+                    </li>
+                """
+            fin = open("htdocs/index.html", "r")
+            content = fin.read()
+            fin.close()
+
+            content = content.replace("{{LISTA_DE_CARROS}}", car_html)
+            response = "HTTP/1.1 200 OK\r\n\r\n" + content
+            client_connection.sendall(response.encode('utf-8'))
+        elif 'veiculo.html?' in filename:
             car_name = filename.split("=")[1]
             if car_name in banco_de_carros:
                 car_data = banco_de_carros[car_name]
@@ -124,23 +170,22 @@ def get(headers, client_connection):
             else:
                 response = "HTTP/1.1 404 NOT FOUND\r\n\r\n<h1>ERROR 404!<br>Veículo não encontrado.</h1>"
                 client_connection.sendall(response.encode('utf-8'))
-        else:
-            #Tratamento de imagens
-            if filename.endswith(".jpg") or filename.endswith(".png"):
-                fin = open("htdocs" + filename, "rb")
-                content_bytes = fin.read()
-                fin.close()
-                
-                header = "HTTP/1.1 200 OK\r\n\r\n"
-                client_connection.sendall(header.encode('utf-8') + content_bytes)
+            
+            #tratamento de imagem
+        elif filename.endswith(".jpg") or filename.endswith(".png"):
+            fin = open("htdocs" + filename, "rb")
+            content_bytes = fin.read()
+            fin.close() 
+            header = "HTTP/1.1 200 OK\r\n\r\n"
+            client_connection.sendall(header.encode('utf-8') + content_bytes)
 
             #Tratamento de paginas padrão
-            else:
-                fin = open("htdocs" + filename)
-                content = fin.read()
-                fin.close()
-                response = "HTTP/1.1 200 OK\n\n" + content
-                client_connection.sendall(response.encode())
+        else:
+            fin = open("htdocs" + filename)
+            content = fin.read()
+            fin.close()
+            response = "HTTP/1.1 200 OK\n\n" + content
+            client_connection.sendall(response.encode())
     except FileNotFoundError:
         #caso o arquivo solicitado não exista no servidor, gera uma resposta de erro
         response = "HTTP/1.1 404 NOT FOUND\n\n<h1>ERROR 404!<br>File Not Found!</h1>"
