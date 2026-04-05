@@ -1,0 +1,133 @@
+/* Estrutura flexível para o rodapé ficar no fundo da tela */
+/* .admin-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f4f4f4;
+} */
+
+/* Espaço central flexível que empurra o rodapé para baixo */
+.conteiner-principal {
+    flex: 1; /* Faz o conteúdo principal crescer e preencher o espaço vazio */
+    padding: 40px 20px;
+}
+
+/* Estilos do Painel */
+.painel {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.painel h2 {
+    color: #333;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.link-voltar {
+    display: inline-block;
+    margin-bottom: 25px;
+    color: #555;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.link-voltar:hover {
+    color: #000;
+}
+
+.item-carro {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.nome-carro-admin {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.btn-deletar {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-deletar:hover {
+    background-color: #c9302c;
+}
+
+/* ========================================= */
+/* ESTILOS DO FORMULÁRIO DE ADICIONAR (POST) */
+/* ========================================= */
+
+.sessao-adicionar {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    border: 1px solid #ddd;
+}
+
+.titulo-sessao {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.grupo-input {
+    margin-bottom: 10px;
+}
+
+.grupo-input-ultimo {
+    margin-bottom: 15px;
+}
+
+.label-admin {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #444;
+}
+
+.input-admin {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Garante que o padding não quebre a largura de 100% */
+}
+
+.input-admin:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.btn-adicionar {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.btn-adicionar:hover {
+    background-color: #218838;
+}

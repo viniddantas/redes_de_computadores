@@ -1,11 +1,136 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administracao - MasterCar</title>
-</head>
-<body>
+    <title>Painel de Administração - MasterCar</title>
     
+    <link href="./css/reset.css" rel="stylesheet">
+    <link href="./css/head_foot.css" rel="stylesheet">
+    <link href="./css/administracao.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body class="admin-body">
+    <header class="cabecalho">
+        <h1 class="logo">MasterCar</h1>
+        <nav class="menu">
+            <ul>
+                <li><a href="./">Home</a></li>
+                <li><a href="./sobre.html">Sobre</a></li>
+                <li><a href="./login.html" class="btn-login">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="conteiner-principal">
+        <div class="painel">
+            <h2>🚗 Gerenciar Estoque (Painel Admin)</h2>
+            <a href="/" class="link-voltar">&larr; Voltar para a Loja</a>
+
+            <div class="sessao-adicionar">
+                <h3 class="titulo-sessao">➕ Adicionar Novo Veículo</h3>
+                
+                <form action="/adicionar-veiculo" method="POST">
+                    
+                    <div class="grupo-input">
+                        <label for="chave" class="label-admin">Chave no Sistema (ex: celta, hilux):</label>
+                        <input type="text" id="chave" name="chave" class="input-admin" required>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="nome" class="label-admin">Nome Completo do Carro:</label>
+                        <input type="text" id="nome" name="nome" class="input-admin" required>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="imagem" class="label-admin">Caminho da Imagem (ex: /img/celta.jpg):</label>
+                        <input type="text" id="imagem" name="imagem" class="input-admin" required>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="preco" class="label-admin">Preço (ex: R$ 15.000):</label>
+                        <input type="text" id="preco" name="preco" class="input-admin" required>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="ano" class="label-admin">Ano (ex: 2010):</label>
+                        <input type="text" id="ano" name="ano" class="input-admin" required>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="cavalos" class="label-admin">Potência (ex: 78 CV):</label>
+                        <input type="text" id="cavalos" name="cavalos" class="input-admin" required>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="cilindros" class="label-admin">Motor/Cilindros (ex: VHC-E 1.0):</label>
+                        <input type="text" id="cilindros" name="cilindros" class="input-admin" required>
+                    </div>
+
+                    <div class="grupo-input grupo-input-ultimo">
+                        <label for="descricao" class="label-admin">Descrição Detalhada:</label>
+                        <textarea id="descricao" name="descricao" class="input-admin" rows="3" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-adicionar">
+                        Salvar Veículo no Banco de Dados
+                    </button>
+                </form>
+            </div>
+
+            <h3 class="titulo-sessao">🗑️ Veículos no Estoque</h3>
+            <div id="lista-carros">
+                {{LISTA_DE_CARROS_ADMIN}}
+            </div>
+        </div>
+    </main>
+
+    <footer class="rodape">
+        <div class="rodape-conteudo">
+            <div class="rodape-logo">
+                <h2>MasterCar</h2>
+            </div>
+            <div class="rodape-contato">
+                <h3>Contato</h3>
+                <form action="/contato" method="POST" class="form-contato">
+                    <div class="campo">
+                        <label for="email">E-mail:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="campo">
+                        <label for="assunto">Assunto:</label>
+                        <input type="text" id="assunto" name="assunto" required>
+                    </div>
+                    <div class="campo">
+                        <label for="mensagem">Mensagem:</label>
+                        <textarea id="mensagem" name="mensagem" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-enviar">Enviar para o Servidor</button>
+                </form>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function deletarCarro(chaveDoCarro) {
+            let confirmacao = confirm("Tem certeza que deseja remover este carro do sistema?");
+            
+            if (confirmacao) {
+                fetch('/remover?carro=' + chaveDoCarro, {
+                    method: 'DELETE'
+                })
+                .then(resposta => {
+                    if (resposta.ok) {
+                        alert("Carro removido com sucesso!");
+                        window.location.reload();
+                    } else {
+                        alert("Erro ao tentar remover o carro.");
+                    }
+                });
+            }
+        }
+    </script>
 </body>
 </html>
