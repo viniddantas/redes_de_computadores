@@ -355,14 +355,14 @@ while True:
         # print(headers[0].split()[1])
         if method == 'GET':
             get(headers, client_connection)
-        elif method == 'POST' and headers[1] == "/Upload.html":
-            start = request.find('filename="') + len('filename="')
-            end = request.find('"', start)
+        # elif method == 'POST' and headers[1] == "/Upload.html":
+        #     start = request.find('filename="') + len('filename="')
+        #     end = request.find('"', start)
 
-            print("\nStart/n", start)
-            print("\nEndn", end)
+        #     print("\nStart/n", start)
+        #     print("\nEndn", end)
             
-            upload(request, client_connection, request[start:end])
+        #     upload(request, client_connection, request[start:end])
         elif method == 'POST':
             post(request, client_connection)
         elif method == "DELETE":
