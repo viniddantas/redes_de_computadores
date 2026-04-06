@@ -1,70 +1,24 @@
 import socket
+import os
+import json
 
-banco_de_carros = {
-    "ferrari": {
-        "nome": "Ferrari 458 Italia",
-        "imagem": "/img/ferrari.jpg",
-        "preco": "R$ 2.000.000",
-        "ano": "2020",
-        "descricao": "Ferrari 458 Italia 4.5 V8 32V Gasolina F1-DCT - Vermelho - 2011",
-        "cavalos": "570 CV",
-        "cilindros": "V8",
-    },
-    "porsche": {
-        "nome": "Porsche 911 Carrera S",
-        "imagem": "/img/porsche.jpg",
-        "preco": "R$ 1.100.000",
-        "ano": "2020",
-        "descricao": "Porsche 911 Carrera S 3.0 24V H6 Gasolina PDK - Prata - 2024",
-        "cavalos": "450 CV",
-        "cilindros": "H6 (Boxer)",
-    },
-    "uno": {
-        "nome": "Fiat Uno Mille Way",
-        "imagem": "/img/uno.jpg",
-        "preco": "R$ 30.000",
-        "ano": "1995",
-        "descricao": "Fiat Uno Mille Way Economy 1.0 Fire Flex Manual - Branco - 2013",
-        "cavalos": "2000 CV",
-        "cilindros": "L4",
-    },
-    "mercedes": {
-        "nome": "Mercedes-Benz 300 SL",
-        "imagem": "/img/mercedes.jpg",
-        "preco": "R$ 15.000.000",
-        "ano": "2020",
-        "descricao": "Mercedes-Benz 300 SL Gullwing 3.0 L6 Gasolina Manual - Prata - 1955",
-        "cavalos": "215 CV",
-        "cilindros": "L6",
-    },
-    "lamborghini": {
-        "nome": "Lamborghini Aventador",
-        "imagem": "/img/lamborghini.jpg",
-        "preco": "R$ 4.500.000",
-        "ano": "2020",
-        "descricao": "Lamborghini Aventador LP 700-4 6.5 V12 Gasolina ISR - Laranja - 2018",
-        "cavalos": "700 CV",
-        "cilindros": "V12",
-    },
-    "nissan": {
-        "nome": "Nissan Skyline GT-R R34",
-        "imagem": "/img/nissan.jpg",
-        "preco": "R$ 1.200.000",
-        "ano": "2020",
-        "descricao": "Nissan Skyline GT-R V-Spec II 2.6 L6 Biturbo Manual - Azul - 2002",
-        "cavalos": "280 CV",
-        "cilindros": "L6",
-    },
-    "chevrolet": {
-        "nome": "Chevrolet Corvette C8",
-        "imagem": "/img/chevrolet.jpg",
-        "preco": "R$ 1.300.000",
-        "ano": "2020",
-        "descricao": "Chevrolet Corvette Stingray 6.2 V8 Gasolina Dual-Clutch - Amarelo - 2023",
-        "cavalos": "495 CV",
-        "cilindros": "V8",
-    }
-}
+ARQUIVO_BANCO = "banco_de_carros.json"
+
+def carregar_banco():
+    if os.path.exists(ARQUIVO_BANCO):
+        fin = open(ARQUIVO_BANCO, "r", encoding="utf-8")
+        data = json.load(fin)
+        fin.close()
+        return data
+    else:
+        return {}
+
+def salvar_banco(dados):
+    fin = open(ARQUIVO_BANCO, "w", encoding="utf-8")
+    data = json.dump(dados, fin, indent=4, ensure_ascii=False)
+    fin.close()
+
+banco_de_carros = carregar_banco()
 
 #definindo o endereço IP do host
 SERVER_HOST = ""
@@ -234,8 +188,12 @@ def post(request, client_connection):
 
         print("FILENAME", filename)
 
-        with open(filename, "a", encoding="utf-8") as f:
-            f.write(body + "\n")
+        fin = open(filename, "a", encoding="utf-8")
+        fin.write(body + "\n")
+        fin.close()
+
+        # with open(filename, "a", encoding="utf-8") as f:
+        #     f.write(body + "\n")
         
         if 'login' in request_type:
             if len(parts) > 0 and len(body) > 1:
@@ -288,6 +246,8 @@ def post(request, client_connection):
                 "descricao": dados['descricao']
             }
 
+            salvar_banco(banco_de_carros)
+            
             print(f"Sucesso! O carro {new_key} foi adicionado no banco.")
 
             response = "HTTP/1.1 302 Found\r\nLocation: /administracao.html\r\n\r\n"
@@ -314,6 +274,7 @@ def delete(request, client_connection):
         if car_name in banco_de_carros:
             print(f"Apagando {car_name} da base de dados")
             del banco_de_carros[car_name]
+            salvar_banco(banco_de_carros)
             response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nRemovido com sucesso!"
             client_connection.sendall(response.encode('utf-8'))
         else:
@@ -384,14 +345,24 @@ while True:
 
     #pega a solicitação do cliente
     request = request_receive(client_connection)
-
+    
     #verifica se a request possui algum conteúdo (pois alguns navegadores ficam periodicamente enviando alguma string vazia)
     if request:
-        print(request.split("\r\n")[0], sep="")
+        # print(request.split("\r\n")[0], sep="")
         headers = request.split()
         method = request.split()[0]
+        # print("Headers", headers)
+        # print(headers[0].split()[1])
         if method == 'GET':
             get(headers, client_connection)
+        elif method == 'POST' and headers[1] == "/Upload.html":
+            start = request.find('filename="') + len('filename="')
+            end = request.find('"', start)
+
+            print("\nStart/n", start)
+            print("\nEndn", end)
+            
+            upload(request, client_connection, request[start:end])
         elif method == 'POST':
             post(request, client_connection)
         elif method == "DELETE":
