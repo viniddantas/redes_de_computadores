@@ -357,7 +357,7 @@ def put(request, client_connection):
         fin = open("htdocs" + filename, "w")
         fin.write(content)
         #fecha o arquivo
-        fin.close
+        fin.close()
         #envia a resposta
         response = f"""
         HTTP/1.1 201 Created\r\n
