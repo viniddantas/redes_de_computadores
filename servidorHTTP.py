@@ -186,15 +186,12 @@ def post(request, client_connection):
         else:
             filename = request_type.replace("/", "") + ".txt"
 
-        print("FILENAME", filename)
+        # print("FILENAME", filename)
 
         fin = open(filename, "a", encoding="utf-8")
         fin.write(body + "\n")
         fin.close()
 
-        # with open(filename, "a", encoding="utf-8") as f:
-        #     f.write(body + "\n")
-        
         if 'login' in request_type:
             if len(parts) > 0 and len(body) > 1:
                 usuario = body.split("&")[0].split("=")[1]
@@ -267,24 +264,119 @@ def post(request, client_connection):
 
 def delete(request, client_connection):
     try:
-        #obtem o nome do carro
-        car_name = request.split()[1].split("=")[1]
 
-        #verifica se o carro está contido na base de dados 
-        if car_name in banco_de_carros:
-            print(f"Apagando {car_name} da base de dados")
-            del banco_de_carros[car_name]
-            salvar_banco(banco_de_carros)
-            response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nRemovido com sucesso!"
-            client_connection.sendall(response.encode('utf-8'))
+        path = request.split()[1]
+        
+        if "/remover?carro=" in path:
+            #obtem o nome do carro
+            car_name = request.split()[1].split("=")[1]
+
+            #verifica se o carro está contido na base de dados 
+            if car_name in banco_de_carros:
+                print(f"Apagando {car_name} da base de dados")
+                del banco_de_carros[car_name]
+                salvar_banco(banco_de_carros)
+                response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nRemovido com sucesso!"
+                client_connection.sendall(response.encode('utf-8'))
+            else:
+                response = "HTTP/1.1 400 Bad Request\r\n\r\nRota invalida."
+                client_connection.sendall(response.encode('utf-8'))
+            print("\n", response, sep="")
         else:
-            response = "HTTP/1.1 400 Bad Request\r\n\r\nRota invalida."
-            client_connection.sendall(response.encode('utf-8'))
-        print("\n", response, sep="")
+            path_name = path.lstrip('/')
+
+            if os.path.exists(path_name):
+                os.remove(path_name)
+                
+                print(f"Sucesso: Arquivo '{path_name}' deletado do servidor.")
+                response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nArquivo removido com sucesso!"
+                client_connection.sendall(response.encode('utf-8'))
+            else:
+                print(f"Erro: O recurso '{path_name}' não foi encontrado.")
+                response = "HTTP/1.1 404 Not Found\r\n\r\nRecurso nao encontrado."
+                client_connection.sendall(response.encode('utf-8'))
+
     except Exception as e:
         print(f"Erro ao processar DELETE: {e}")
         erro_500 = "HTTP/1.1 500 Internal Server Error\r\n\r\nErro interno no servidor."
         client_connection.sendall(erro_500.encode('utf-8'))
+
+def put(request, client_connection):
+    #analisa a solicitação HTTP
+    headers = request.split("\n")
+    #print(headers)#impressão dos cabeçalhos
+    #pega o nome do arquivo sendo solicitado
+    filename = headers[0].split()[1]
+    #pega o conetúdo do body da mensagem
+    content = request.split("\r\n\r\n", 1)[1]
+
+    #Verifica se o put não irá sobrescrever em uma página importante do servidor
+    if(
+        filename == "/" or
+        filename == "/index.html" or
+        filename == "/administracao.html" or
+        filename == "/login.html" or
+        filename == "/sobre.html" or
+        filename == "/upload.html" or
+        filename == "/veiculo.html"
+    ):
+        response = "HTTP/1.1 403 Forbidden\r\n\r\n<html><head>Erro 403</head><body><h1>Erro 403!<br>O arquivo já existe e não pode ser sobrescrito.</h1></html>"
+        client_connection.sendall(response.encode('utf-8'))
+        return
+
+    #try e except para caso o arquivo exista
+    try:
+        #abrir o arquivo, caso ele exista
+        fin = open("htdocs" + filename, "r")
+        #reescreve dentro do arquivo
+        fin = open("htdocs" + filename, "w")
+        fin.write(content)
+        #fecho o arquivo
+        fin.close()
+        #envia a resposta
+        response = f"""
+        HTTP/1.1 200 OK\r\n
+        Content-Type: text/html; charset=utf-8\r\n
+        \r\n
+        <html>
+            <head>
+                <meta charset = "UTF-8"/>
+                <title>200 OK</title>
+            </head>
+            <body>
+                <h1>200 OK</h1>
+                <p>O arquivo {filename} foi sobrescrito e pode ser acessado <a href = {filename}>clicando aqui</a>.</p>
+            </body>
+        </html>
+        """
+    except FileNotFoundError:
+        #caso o arquivo não exista, cria um e escreve o conteúdo
+        fin = open("htdocs" + filename, "w")
+        fin.write(content)
+        #fecha o arquivo
+        fin.close
+        #envia a resposta
+        response = f"""
+        HTTP/1.1 201 Created\r\n
+        Content-Type: text/html; charset=utf-8\r\n
+        \r\n
+        <html>
+            <head>
+                <meta charset = "UTF-8"/>
+                <title>201 CREATED</title>
+            </head>
+            <body>
+                <h1>201 CREATED</h1>
+                <p>O arquivo {filename} foi adicionado ao servidor e pode ser acessado <a href = {filename}>clicando aqui</a>.</p>
+            </body>
+        </html>
+        """
+    except Exception as e:
+        print(f"Erro ao processar PUT: {e}")
+        response = "HTTP/1.1 500 Internal Server Error\r\n\r\nErro interno no servidor."
+
+    #envia a resposta HTTP
+    client_connection.sendall(response.encode('utf-8'))
 
 def request_receive(client_connection):
     request = b""
@@ -348,25 +440,17 @@ while True:
     
     #verifica se a request possui algum conteúdo (pois alguns navegadores ficam periodicamente enviando alguma string vazia)
     if request:
-        # print(request.split("\r\n")[0], sep="")
+        print(request.split("\r\n")[0], sep="")
         headers = request.split()
         method = request.split()[0]
-        # print("Headers", headers)
-        # print(headers[0].split()[1])
         if method == 'GET':
             get(headers, client_connection)
-        # elif method == 'POST' and headers[1] == "/Upload.html":
-        #     start = request.find('filename="') + len('filename="')
-        #     end = request.find('"', start)
-
-        #     print("\nStart/n", start)
-        #     print("\nEndn", end)
-            
-        #     upload(request, client_connection, request[start:end])
         elif method == 'POST':
             post(request, client_connection)
         elif method == "DELETE":
             delete(request, client_connection)
+        elif method == "PUT":
+            put(request, client_connection)
         
         client_connection.close()
 
