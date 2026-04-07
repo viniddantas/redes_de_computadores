@@ -23,7 +23,7 @@ banco_de_carros = carregar_banco()
 #definindo o endereço IP do host
 SERVER_HOST = ""
 #definindo o número da porta em que o servidor irá escutar pelas requisições HTTP
-SERVER_PORT = 8080
+SERVER_PORT = 80
 
 #criando socket
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -38,8 +38,10 @@ server_socket.bind((SERVER_HOST, SERVER_PORT))
 server_socket.listen(1)
 
 #mensagem inicial do servidor
+print("="*60)
 print("Servidor em execução...")
 print("Escutando por conexões na porta %s" % SERVER_PORT)
+print("="*60)
 
 def get(headers, client_connection):
     filename = headers[1]
