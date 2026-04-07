@@ -1,4 +1,0 @@
-chave=dsadsa&nome=das&imagem=dasdsa&preco=dasdasdas&ano=dsa&cavalos=ads&cilindros=ds&descricao=das
-chave=civic&nome=Honda+Civic+Touring&imagem=https%3A%2F%2Fcdn.motor1.com%2Fimages%2Fmgl%2FGxRQG%2Fs1%2Fhonda-civic-touring-em-movimento.jpg&preco=R%24+155.000&ano=2025&cavalos=173+CV&cilindros=4+Cilindros+1.5+Turbo&descricao=4+Cilindros+1.5+Turbo4+Cilindros+1.5+Turbo4+Cilindros+1.5+Turbo4+Cilindros+1.5+Turbo4+Cilindros+1.5+Turbo
-chave=a&nome=a&imagem=a&preco=a&ano=a&cavalos=a&cilindros=a&descricao=a
-chave=ddasd&nome=dsad&imagem=dsa&preco=dsa&ano=das&cavalos=dsa&cilindros=das&descricao=das

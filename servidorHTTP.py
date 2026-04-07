@@ -49,7 +49,7 @@ def get(headers, client_connection):
     try:
         if filename == "/index.html":
             
-            print("\n=====Gerando index.html=====\n")
+            # print("\n=====Gerando index.html=====\n")
             car_html = ""
 
             #Gerando o card de cada carro na página inicial
@@ -97,11 +97,11 @@ def get(headers, client_connection):
             content = content.replace("{{LISTA_DE_CARROS}}", car_html)
             response = "HTTP/1.1 200 OK\r\n\r\n" + content
             client_connection.sendall(response.encode('utf-8'))
-            
+            print("✅ Status 200 OK -> index.html enviado.")   
         elif 'veiculo.html?' in filename:
             #Gera uma página modelo para cada veículo
             
-            print("\n=====Gerando veiculo.html=====\n")
+            # print("\n=====Gerando veiculo.html=====\n")
             car_name = filename.split("=")[1]
             if car_name in banco_de_carros:
                 car_data = banco_de_carros[car_name]
@@ -124,7 +124,6 @@ def get(headers, client_connection):
                 response = "HTTP/1.1 404 NOT FOUND\r\n\r\n<h1>ERROR 404!<br>Veículo não encontrado.</h1>"
                 client_connection.sendall(response.encode('utf-8'))
         elif 'administracao.html' in filename:
-            print("\n=====Gerando administracao.html=====\n")
             html_admin_car = ""
 
             for car, details in banco_de_carros.items():
@@ -142,22 +141,25 @@ def get(headers, client_connection):
             
             response = "HTTP/1.1 200 OK\n\n" + content
             client_connection.sendall(response.encode('utf-8'))
-
+            print(f"✅ Status 200 OK -> administracao.html enviado.")
         #tratamento de imagem
         elif filename.endswith(".jpg") or filename.endswith(".png"):
+            # print(f"\n===== Gerando {filename} =====\n")
             fin = open("htdocs" + filename, "rb")
             content_bytes = fin.read()
             fin.close() 
             header = "HTTP/1.1 200 OK\r\n\r\n"
             client_connection.sendall(header.encode('utf-8') + content_bytes)
-
+            print(f"✅ Status 200 OK -> {filename} enviado.")
         #Tratamento de paginas genericas
         else:
+            # print(f"\n===== Gerando {filename} =====\n")
             fin = open("htdocs" + filename)
             content = fin.read()
             fin.close()
             response = "HTTP/1.1 200 OK\n\n" + content
             client_connection.sendall(response.encode())
+            print(f"✅ Status 200 OK -> {filename} enviado.")
     except FileNotFoundError:
         #caso o arquivo solicitado não exista no servidor, gera uma resposta de erro
         response = "HTTP/1.1 404 NOT FOUND\n\n<h1>ERROR 404!<br>File Not Found!</h1>"
@@ -253,7 +255,7 @@ def post(request, client_connection):
             print("\n--- FORMULÁRIO DE CONTATO RECEBIDO ---")
             
             if body:
-                print(f"Mensagem bruta recebida: {body}")
+                print(f"Mensagem recebida: {body}")
 
             response = "HTTP/1.1 302 Found\r\nLocation: /\r\n\r\n"
             client_connection.sendall(response.encode('utf-8'))
@@ -349,6 +351,7 @@ def put(request, client_connection):
             </body>
         </html>
         """
+        print(f"✅ Status 200 OK -> Arquivo '{filename}' existente foi atualizado.")
     except FileNotFoundError:
         #caso o arquivo não exista, cria um e escreve o conteúdo
         fin = open("htdocs" + filename, "w")
@@ -371,12 +374,14 @@ def put(request, client_connection):
             </body>
         </html>
         """
+        print(f"✅ Status 201 Created -> Novo arquivo '{filename}' gerado com sucesso.")
     except Exception as e:
         print(f"Erro ao processar PUT: {e}")
         response = "HTTP/1.1 500 Internal Server Error\r\n\r\nErro interno no servidor."
 
     #envia a resposta HTTP
     client_connection.sendall(response.encode('utf-8'))
+
 
 def request_receive(client_connection):
     request = b""
@@ -440,17 +445,28 @@ while True:
     
     #verifica se a request possui algum conteúdo (pois alguns navegadores ficam periodicamente enviando alguma string vazia)
     if request:
-        print(request.split("\r\n")[0], sep="")
+        primeira_linha = request.split("\r\n")[0]
+    
+        print("=" * 60)
+        # print("🔴 " + primeira_linha)
+        # print("=" * 60)
+
         headers = request.split()
         method = request.split()[0]
         if method == 'GET':
+            print("🔴 ", primeira_linha)
             get(headers, client_connection)
         elif method == 'POST':
+            print("⬆️ ", primeira_linha)
             post(request, client_connection)
         elif method == "DELETE":
+            print("❌ ", primeira_linha)
             delete(request, client_connection)
         elif method == "PUT":
+            print("⬆️ ", primeira_linha)
             put(request, client_connection)
+        else:
+            print(f"{method} nao esta disponivel")
         
         client_connection.close()
 
